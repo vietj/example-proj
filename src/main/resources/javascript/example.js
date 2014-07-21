@@ -10,7 +10,7 @@ vertx.deployVerticle("java:io.vertx.mongodb.MongoDBServiceVerticle", {}, functio
 
   // Now lets create a local proxy to it, which works by sending messages to and from the actual verticle over the
   // event bus, but you interact with it using a rich idiomatic API
-  var mongoDBService = MongoDBService.create(vertx, {});
+  var mongoDBService = MongoDBService.createEventBusProxy(vertx, "vertx.mongodb");
 
 
   // Execute an operation on the service
