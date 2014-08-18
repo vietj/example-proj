@@ -8,7 +8,7 @@ import io.vertx.core.Vertx;
 public class MyMain {
 
   public static void main(String[] args) {
-    Vertx vertx = Vertx.newVertx();
+    Vertx vertx = Vertx.vertx();
 
     //vertx.deployVerticle("java:" + MyVerticle.class.getName());
     vertx.deployVerticle("js:javascript/example.js");

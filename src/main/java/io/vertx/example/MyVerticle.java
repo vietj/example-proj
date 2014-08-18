@@ -1,7 +1,6 @@
 package io.vertx.example;
 
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.DeploymentOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mongodb.MongoDBService;
 import io.vertx.mongodb.MongoDBServiceVerticle;
@@ -16,15 +15,30 @@ public class MyVerticle extends AbstractVerticle {
 
     // Deploy a mongo persistor
 
-    vertx.deployVerticle("java:" + MongoDBServiceVerticle.class.getName(), new DeploymentOptions(), ar -> {
+    vertx.deployVerticle("java:" + MongoDBServiceVerticle.class.getName(), ar -> {
       if (ar.succeeded()) {
         System.out.println("Succeeded in deploying mongo verticle");
 
-        MongoDBService service = vertx.eventBus().createProxy(MongoDBService.class, "vertx.mongodb");
-
-        service.find("foo", new JsonObject(), ar2 -> {
-          System.out.println("Got result: " + ar2.result());
+        MongoDBService mongo = vertx.eventBus().createProxy(MongoDBService.class, "vertx.mongodb");
+        JsonObject doc = new JsonObject().putString("foo", "bar").putNumber("age", 43);
+        mongo.insert("mycollection", doc, "SAFE", ar2 -> {
+          if (ar2.succeeded()) {
+            System.out.println("succeeded");
+            mongo.findOne("mycollection", new JsonObject().putString("foo", "bar"), null, ar3 -> {
+              if (ar3.succeeded()) {
+                JsonObject result = ar3.result();
+                System.out.println("age is " + result.getInteger("age"));
+              } else {
+                ar3.cause().printStackTrace();
+              }
+            });
+          } else {
+            ar2.cause().printStackTrace();
+          }
         });
+
+
+
 
       } else {
         ar.cause().printStackTrace();

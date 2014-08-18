@@ -4,7 +4,7 @@ var MongoDBService = require('mongodb-js/mongo_dbservice.js');
 console.log("Starting");
 
 // First lets deploy our MongoDB module
-vertx.deployVerticle("java:io.vertx.mongodb.MongoDBServiceVerticle", {}, function(deploymentID, err) {
+vertx.deployVerticle("java:io.vertx.mongodb.MongoDBServiceVerticle", function(deploymentID, err) {
   console.log("deployment id is " + deploymentID);
 
 
@@ -12,9 +12,10 @@ vertx.deployVerticle("java:io.vertx.mongodb.MongoDBServiceVerticle", {}, functio
   // event bus, but you interact with it using a rich idiomatic API
   var mongoDBService = MongoDBService.createEventBusProxy(vertx, "vertx.mongodb");
 
+  console.log("got mongodb service proxy");
 
   // Execute an operation on the service
-  mongoDBService.find("foo", {}, function(res, err2) {
+  mongoDBService.findOne('myCollection', {foo: 'bar'}, {}, function(res, err2) {
     console.log("result is: " + JSON.stringify(res));
   });
 });
