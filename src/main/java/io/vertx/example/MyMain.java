@@ -10,8 +10,8 @@ public class MyMain {
   public static void main(String[] args) {
     Vertx vertx = Vertx.vertx();
 
-    //vertx.deployVerticle("java:" + MyVerticle.class.getName());
-    vertx.deployVerticle("js:javascript/example.js");
+    vertx.deployVerticle("java:" + MyVerticle.class.getName());
+    //vertx.deployVerticle("js:javascript/example.js");
 
     try {
       Thread.sleep(10000);
