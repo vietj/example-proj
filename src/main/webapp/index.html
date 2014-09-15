@@ -1,0 +1,82 @@
+<html>
+<head>
+  <title></title>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/sockjs-client/0.3.4/sockjs.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="vertxbus.js"></script>
+</head>
+
+<style>
+  .news {
+    font-size: 12pt;
+  }
+
+  .box {
+    background-color: #F0F0F0;
+    border: 5px solid blue;
+    width: 400px;
+    height: 300px;
+  }
+
+
+  body {
+    background-color: #F0F0F0;
+  }
+</style>
+
+<body>
+
+<div >Latest prices: </div><br>
+
+Red Hat:<div id="RHT"></div><br>
+Oracle:<div id="ORCL"></div><br>
+Google:<div id="GOOGL"></div><br>
+VMware:<div id="VMW"></div><br>
+
+<div id="send" class="box">
+
+  <form onsubmit="return false;">
+    Symbol:<input type="text" id="symbol" value=""/><br>
+    Price:<input type="text" id="price" value=""/>
+    <input type="button" id="sendButton" value="Send message"/>
+  </form>
+
+  <div id="orderResponse"></div>
+
+</div>
+
+<script>
+
+  var eb = new vertx.EventBus("http://localhost:8080/eventbus");
+
+  eb.onopen = function() {
+    eb.registerHandler("example.stocks", function(priceInfo) {
+      $('#' + priceInfo.symbol).text(priceInfo.price);
+    })    
+  }
+
+  $(document).ready(function() {
+    $("#sendButton").click(function () {
+      // Send an HTTP POST to the REST API to place the order
+      // Alternatively you could just send the message on the event bus and have the server listening for that
+      // - might be simpler
+      var req = new XMLHttpRequest();
+      req.open("POST", "http://localhost:8080/api/order", true);
+      req.setRequestHeader("Content-Type", "text/json");
+      var order = {symbol: $("#symbol").val(), price: Number($("#price").val())};
+      req.send(JSON.stringify(order));
+      req.onload = function (e) {
+        if (req.status === 200) {
+          //console.log(xhr.responseText);
+          $("#orderResponse").text(req.responseText);
+        } else {
+          console.error(req.statusText);
+        }
+      };
+    });
+  });
+
+</script>
+
+</body>
+</html>
