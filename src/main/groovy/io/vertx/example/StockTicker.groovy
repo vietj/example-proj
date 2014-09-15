@@ -21,7 +21,7 @@ class StockTicker extends GroovyVerticle {
           'symbol' : symb,
           'price' : price
         ])
-        println "published: $symb at $price"
+        //println "published: $symb at $price"
       };
 
     })

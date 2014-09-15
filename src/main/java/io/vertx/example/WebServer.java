@@ -1,6 +1,7 @@
 package io.vertx.example;
 
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerRequest;
@@ -25,7 +26,9 @@ public class WebServer extends AbstractVerticle {
   private MongoService mongoService;
 
   @Override
-  public void start() {
+  public void start(Future<Void> startFuture) {
+
+    JsonObject config = vertx.context().config();
 
     webRoot = config.getString("webroot", "web") + "/";
 
@@ -51,15 +54,17 @@ public class WebServer extends AbstractVerticle {
 
     setupSockJSBridge(server);
 
-    server.listen();
+    server.listen(res -> {
+      // When the web server is listening we'll say that the start of this verticle is complete
+      if (res.succeeded()) {
+        startFuture.complete();
+      } else {
+        startFuture.fail(res.cause());
+      }
+    });
 
     System.out.println("Server is listening");
   }
-
-//  private void handle(HttpServerRequest req) {
-//    System.out.println("Got request");
-//    req.response().end();
-//  }
 
   /*
   Handle an in-coming request to the path /web - this is used to serve standard web resources
@@ -78,14 +83,6 @@ public class WebServer extends AbstractVerticle {
       request.response().sendFile(webRoot + request.path());
     }
   }
-
-  /*
-  Handle unknown requests
-   */
-//  private void handleNoMatch(HttpServerRequest request) {
-//    // Just send back a 404 - you could provide a nicer 404 page if you like
-//    request.response().setStatusCode(404).end("Can't find that!");
-//  }
 
   /*
   Handle an order posted to the REST API
