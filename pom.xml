@@ -9,52 +9,64 @@
   <version>1.0-SNAPSHOT</version>
 
   <dependencies>
+
+    <!-- If you're using the Vert.x Java API you need this dependency -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
+    <!-- If you're using the Vert.x JavaScript API you need this dependency -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-js</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
+    <!-- If you're using the Vert.x Groovy API you need this dependency -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-groovy</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
+    <!-- We're using Groovy so add a dependency to the Groovy jar -->
     <dependency>
      <groupId>org.codehaus.groovy</groupId>
      <artifactId>groovy-all</artifactId>
      <version>2.3.3</version>
     </dependency>
+
+    <!-- ext dependencies
+    ext stands for "extensions". and they form the official Vert.x stack of add on functionality -->
+
+    <!-- We're using the Vert.x MongoDB Service -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>ext-mongo</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
+    <!-- We're using the Vert.x routematcher for REST style http route matching -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>ext-routematcher</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
+    <!-- We're using the SockJS bridge for bridging the event bus to client side JavaScript -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>ext-sockjs</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>ext-mongo-embedded-db</artifactId>
-      <version>3.0.0-SNAPSHOT</version>
-    </dependency>
+
+    <!-- test dependencies -->
+
+    <!-- we use JUnit -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <!-- We depend on the Vert.x test jar so we can extend VertxTestBase for asynchronous tests -->
     <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-core</artifactId>
@@ -67,6 +79,7 @@
   <build>
     <pluginManagement>
       <plugins>
+        <!-- We specify the Maven compiler plugin as we need to set it to Java 1.8 -->
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.1</version>
@@ -79,6 +92,7 @@
     </pluginManagement>
     <plugins>
 
+      <!-- We are using Groovy in this project so we configure a Groovy compiler -->
       <plugin>
         <groupId>org.codehaus.gmavenplus</groupId>
         <artifactId>gmavenplus-plugin</artifactId>
@@ -99,7 +113,8 @@
         </executions>
       </plugin>
 
-      <!-- If you want your project to output a fat executable standalone jar with all the dependencies in it you
+      <!-- Fat executable jars
+      If you want your project to output a fat executable standalone jar with all the dependencies in it you
       can use the shade plugin. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
