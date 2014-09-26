@@ -1,13 +1,12 @@
 package io.vertx.example.test;
 
 import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpClientRequest;
 import io.vertx.core.http.RequestOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.test.core.VertxTestBase;
 import org.junit.Test;
-
-import static io.vertx.core.http.HttpClientOptions.*;
 
 /**
  *
@@ -24,9 +23,9 @@ public class RESTAPITest extends VertxTestBase {
 
       System.out.println("Creating client");
 
-      HttpClient client = vertx.createHttpClient(options());
+      HttpClient client = vertx.createHttpClient(new HttpClientOptions());
 
-      HttpClientRequest req = client.post(RequestOptions.options().setHost("localhost").setPort(8080).setRequestURI("/api/order"), resp -> {
+      HttpClientRequest req = client.post(new RequestOptions().setHost("localhost").setPort(8080).setRequestURI("/api/order"), resp -> {
         System.out.println("Got response");
         assertEquals(200, resp.statusCode());
         testComplete();

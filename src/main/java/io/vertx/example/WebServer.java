@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServer;
+import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
@@ -13,7 +14,6 @@ import io.vertx.ext.sockjs.BridgeOptions;
 import io.vertx.ext.sockjs.SockJSServer;
 import io.vertx.ext.sockjs.SockJSServerOptions;
 
-import static io.vertx.core.http.HttpServerOptions.*;
 import static io.vertx.ext.routematcher.RouteMatcher.*;
 
 
@@ -38,7 +38,7 @@ public class WebServer extends AbstractVerticle {
     mongoService = MongoService.createEventBusProxy(vertx, "example.mongoservice");
 
     // Create the HTTP server
-    HttpServer server = vertx.createHttpServer(options().setHost(config.getString("host", "localhost"))
+    HttpServer server = vertx.createHttpServer(new HttpServerOptions().setHost(config.getString("host", "localhost"))
                                                         .setPort(config.getInteger("port", 8080)));
 
     // Setup the routematcher - this is used to route requests on different paths to different handlers
@@ -121,8 +121,8 @@ public class WebServer extends AbstractVerticle {
 
     // We setup the bridge to not allow any inbound messages on the event bus from the client and only outbound
     // messages from the address "example.stocks"
-    sockJSServer.bridge(SockJSServerOptions.options().setPrefix("/eventbus"),
-      BridgeOptions.options().addOutboundPermitted(new JsonObject().putString("address", "example.stocks")));
+    sockJSServer.bridge(new SockJSServerOptions().setPrefix("/eventbus"),
+      new BridgeOptions().addOutboundPermitted(new JsonObject().putString("address", "example.stocks")));
 
   }
 
