@@ -1,7 +1,7 @@
 package io.vertx.example
 
-import io.vertx.groovy.core.GroovyVerticle
 import io.vertx.groovy.core.eventbus.EventBus
+import io.vertx.lang.groovy.GroovyVerticle
 
 class StockTicker extends GroovyVerticle {
 

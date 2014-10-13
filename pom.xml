@@ -50,6 +50,7 @@
       <artifactId>ext-mongo</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
+
     <!-- We're using the Vert.x routematcher for REST style http route matching -->
     <dependency>
       <groupId>io.vertx</groupId>
@@ -78,6 +79,13 @@
       <artifactId>vertx-core</artifactId>
       <version>3.0.0-SNAPSHOT</version>
       <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <!-- We use an embedded MongoDB instance when testing -->
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>ext-mongo-embedded-db</artifactId>
+      <version>3.0.0-SNAPSHOT</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

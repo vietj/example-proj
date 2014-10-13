@@ -3,6 +3,7 @@ package io.vertx.example;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.http.HttpServerRequest;
@@ -45,7 +46,7 @@ public class WebServer extends AbstractVerticle {
     RouteMatcher rm = routeMatcher();
 
     // Requests to /api/* correspond to our (minimal) REST API
-    rm.post("/api/order", this::handleOrder);
+    rm.matchMethod(HttpMethod.POST, "/api/order", this::handleOrder);
 
     // We'll consider anything else to be a web request
     rm.noMatch(this::handleWebRequest);
