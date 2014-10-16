@@ -10,8 +10,6 @@ var config = vertx.context().config();
 // Start our stock ticker
 startVerticle("groovy:io.vertx.example.StockTicker");
 
-console.log("config is " + JSON.stringify(config));
-
 // Start out MongoService verticle and when that's started, start our web server verticle
 startVerticle("service:io.vertx:ext-mongo", config.mongoServiceConfig, function() {
   startVerticle("java:io.vertx.example.WebServer", null, function() {
