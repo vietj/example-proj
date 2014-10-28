@@ -102,12 +102,12 @@ public class WebServer extends AbstractVerticle {
     System.out.println("Received an order!");
     System.out.println("Order is for stock symbol " + order.getString("symbol") + " quantity " +
                                                      order.getInteger("quantity") + " price " +
-                                                     order.getNumber("price"));
+                                                     order.getDouble("price"));
 
     // Now persist it in Mongo
     mongoService.save("exampleCollection", order, null, result -> {
       if (result.succeeded()) {
-        response.end(new JsonObject().putString("ok", "order saved ok").encode());
+        response.end(new JsonObject().put("ok", "order saved ok").encode());
       } else {
         System.err.println("Uh oh! Problem in saving order!: " + result.cause());
         result.cause().printStackTrace();
@@ -123,7 +123,7 @@ public class WebServer extends AbstractVerticle {
     // We setup the bridge to not allow any inbound messages on the event bus from the client and only outbound
     // messages from the address "example.stocks"
     sockJSServer.bridge(new SockJSServerOptions().setPrefix("/eventbus"),
-      new BridgeOptions().addOutboundPermitted(new JsonObject().putString("address", "example.stocks")));
+      new BridgeOptions().addOutboundPermitted(new JsonObject().put("address", "example.stocks")));
 
   }
 
