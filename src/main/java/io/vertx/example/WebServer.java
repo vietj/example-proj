@@ -10,6 +10,7 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoService;
+import io.vertx.ext.mongo.WriteOptions;
 import io.vertx.ext.routematcher.RouteMatcher;
 import io.vertx.ext.sockjs.BridgeOptions;
 import io.vertx.ext.sockjs.SockJSServer;
@@ -31,12 +32,12 @@ public class WebServer extends AbstractVerticle {
 
     JsonObject config = vertx.context().config();
 
-    webRoot = config.getString("webroot", "web") + "/";
+    webRoot = config.getString("webroot", "web");
 
     // Create a proxy to an already deployed MongoService verticle so we can access it without having
     // to manually send messages over the event bus
     // We are going to use this to persist orders
-    mongoService = MongoService.createEventBusProxy(vertx, "example.mongoservice");
+    mongoService = MongoService.createEventBusProxy(vertx, "vertx.mongo");
 
     // Create the HTTP server
     HttpServer server = vertx.createHttpServer(new HttpServerOptions().setHost(config.getString("host", "localhost"))
@@ -78,7 +79,7 @@ public class WebServer extends AbstractVerticle {
       request.response().setStatusCode(403).end();
     } else if (request.path().equals("/")) {
       // Request for root, so send the index
-      request.response().sendFile(webRoot + "index.html");
+      request.response().sendFile(webRoot + "/index.html");
     } else {
       // Send the requested resource
       request.response().sendFile(webRoot + request.path());
@@ -95,7 +96,7 @@ public class WebServer extends AbstractVerticle {
   }
 
   private void processOrder(Buffer rawOrder, HttpServerResponse response) {
-    System.out.println("Got: " + rawOrder.toString());
+    System.out.println("Got order: " + rawOrder.toString());
 
     JsonObject order = new JsonObject(rawOrder.toString());
 
@@ -105,11 +106,11 @@ public class WebServer extends AbstractVerticle {
                                                      order.getDouble("price"));
 
     // Now persist it in Mongo
-    mongoService.save("exampleCollection", order, null, result -> {
+    mongoService.save("exampleCollection", order, new WriteOptions(), result -> {
       if (result.succeeded()) {
         response.end(new JsonObject().put("ok", "order saved ok").encode());
       } else {
-        System.err.println("Uh oh! Problem in saving order!: " + result.cause());
+        System.err.println("Uh oh! Problem in saving order!: " + result.cause().getMessage());
         result.cause().printStackTrace();
         response.setStatusCode(500).end("Failed to process order");
       }

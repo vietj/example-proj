@@ -25,7 +25,7 @@ public class RESTAPITest extends VertxTestBase {
     JsonObject config = new JsonObject();
     // Change the port to 27018 to connect to the embedded Mongo
     JsonObject mongoServiceConfig =
-      new JsonObject().put("address", "example.mongoservice").put("connection_string", "mongodb://localhost:27018");
+      new JsonObject().put("connection_string", "mongodb://localhost:27018");
     config.put("mongoServiceConfig", mongoServiceConfig);
 
     vertx.deployVerticle("js:javascript/app.js", new DeploymentOptions().setConfig(config), onSuccess(deploymentID -> {
