@@ -10,7 +10,6 @@ import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.MongoService;
-import io.vertx.ext.mongo.WriteOptions;
 import io.vertx.ext.routematcher.RouteMatcher;
 import io.vertx.ext.sockjs.BridgeOptions;
 import io.vertx.ext.sockjs.SockJSServer;
@@ -106,7 +105,7 @@ public class WebServer extends AbstractVerticle {
                                                      order.getDouble("price"));
 
     // Now persist it in Mongo
-    mongoService.save("exampleCollection", order, new WriteOptions(), result -> {
+    mongoService.save("exampleCollection", order, result -> {
       if (result.succeeded()) {
         response.end(new JsonObject().put("ok", "order saved ok").encode());
       } else {
