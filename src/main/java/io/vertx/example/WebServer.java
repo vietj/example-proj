@@ -29,7 +29,7 @@ public class WebServer extends AbstractVerticle {
   @Override
   public void start(Future<Void> startFuture) {
 
-    JsonObject config = vertx.context().config();
+    JsonObject config = config();
 
     webRoot = config.getString("webroot", "web");
 
