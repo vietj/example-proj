@@ -5,7 +5,8 @@ This is quite a common pattern.
 
 console.log("Starting example application");
 
-var config = vertx.getOrCreateContext().config;
+var config = vertx.getOrCreateContext().config();
+console.log("Config: " + config);
 
 // Start our stock ticker
 startVerticle("groovy:io.vertx.example.StockTicker");
