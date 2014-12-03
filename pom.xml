@@ -31,7 +31,7 @@
     <!-- If you're using the Vert.x Groovy API you need this dependency -->
     <dependency>
       <groupId>io.vertx</groupId>
-      <artifactId>vertx-groovy</artifactId>
+      <artifactId>vertx-lang-groovy</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
     <!-- We're using Groovy so add a dependency to the Groovy jar -->
