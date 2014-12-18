@@ -48,7 +48,7 @@ public class RESTAPITest extends VertxTestBase {
   public void setUp() throws Exception {
     super.setUp();
     CountDownLatch latch = new CountDownLatch(1);
-    vertx.deployVerticle("service:io.vertx:ext-mongo-embedded-db", onSuccess(res -> {
+    vertx.deployVerticle("service:io.vertx:vertx-mongo-embedded-db", onSuccess(res -> {
       System.out.println("Mongo Started");
       latch.countDown();
     }));

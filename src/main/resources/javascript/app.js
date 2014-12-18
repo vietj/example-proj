@@ -12,7 +12,7 @@ console.log("Config: " + config);
 startVerticle("groovy:io.vertx.example.StockTicker");
 
 // Start out MongoService verticle and when that's started, start our web server verticle
-startVerticle("service:io.vertx:ext-mongo", config.mongoServiceConfig, function() {
+startVerticle("service:io.vertx:mongo-service", config.mongoServiceConfig, function() {
   startVerticle("java:io.vertx.example.WebServer", null, function() {
     moduleStarted(true);
   });
